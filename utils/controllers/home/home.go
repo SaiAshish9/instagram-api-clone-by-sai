@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	_ "github.com/lib/pq"
+	"github.com/saiashish9/instagram/backend/utils/models/home/posts"
 	"github.com/saiashish9/instagram/backend/utils/models/home/status"
 )
 
@@ -51,4 +52,34 @@ func (h Home) FetchStatusList(w http.ResponseWriter, r *http.Request) {
 	m, _ := json.Marshal(links)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(m)
+}
+
+func (h Home) FetchPosts(w http.ResponseWriter, r *http.Request) {
+
+	rows, err := h.db.Query("SELECT * FROM posts")
+	if err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+	defer rows.Close()
+
+	links := make([]posts.Post, 0)
+	for rows.Next() {
+		lk := posts.Post{}
+		err := rows.Scan(&lk.ID, &lk.Name, &lk.URL, &lk.ProfileURL, &lk.Title, &lk.Description, &lk.CommentsCount, &lk.Time)
+		if err != nil {
+			http.Error(w, http.StatusText(500), 500)
+			return
+		}
+		links = append(links, lk)
+	}
+	if err = rows.Err(); err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+
+	m, _ := json.Marshal(links)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(m)
+
 }

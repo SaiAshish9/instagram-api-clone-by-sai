@@ -42,7 +42,7 @@ database: instagram
 
 ```
 insert into status(name,url) values('Sarthak','https://cdn.pixabay.com/photo/2016/08/24/23/08/cristiano-ronaldo-1618341__340.jpg');
-````
+```
 
 ## Select * command shortcut
 
@@ -62,3 +62,27 @@ select * from status order by id desc limit 3;
 \q
 ```
 
+## Posts table
+
+```
+create table posts(
+    ID serial primary key,
+    NAME text not null,
+    URL text not null,
+    PROFILE_URL text not null,
+    TITLE text not null,
+    DESCRIPTION text not null,
+    COMMENTS_COUNT text not null,
+    TIME text not null
+);
+
+```
+
+## ALTER TABLE COMMAND
+
+```
+sudo -u postgres psql
+\c instagram
+\d status
+alter table status add msg text ;
+```
