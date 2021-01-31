@@ -86,3 +86,16 @@ sudo -u postgres psql
 \d status
 alter table status add msg text ;
 ```
+
+## MEDIA
+
+```
+instagram=# create table media(
+ID serial primary key,
+url text,
+is_video int,
+is_gallery int DEFAULT 0);
+
+alter table media alter column is_video set  default 0 ;
+
+```

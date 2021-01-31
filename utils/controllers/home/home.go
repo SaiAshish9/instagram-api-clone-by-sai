@@ -9,6 +9,7 @@ import (
 	"github.com/saiashish9/instagram/backend/utils/models/home/categories"
 	"github.com/saiashish9/instagram/backend/utils/models/home/posts"
 	"github.com/saiashish9/instagram/backend/utils/models/home/status"
+	"github.com/saiashish9/instagram/backend/utils/models/search"
 )
 
 type Home struct {
@@ -108,9 +109,35 @@ func (h Home) FetchCategories(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-
 	m, _ := json.Marshal(links)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(m)
+}
 
+func (h Home) FetchMedia(w http.ResponseWriter, r *http.Request) {
+
+	rows, err := h.db.Query("SELECT * FROM media")
+	if err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+	defer rows.Close()
+
+	links := make([]search.Media, 0)
+	for rows.Next() {
+		lk := search.Media{}
+		err := rows.Scan(&lk.ID, &lk.URL, &lk.IS_VIDEO, &lk.IS_GALLERY)
+		if err != nil {
+			http.Error(w, http.StatusText(500), 500)
+			return
+		}
+		links = append(links, lk)
+	}
+	if err = rows.Err(); err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+	m, _ := json.Marshal(links)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(m)
 }

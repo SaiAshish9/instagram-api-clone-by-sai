@@ -33,6 +33,7 @@ func main() {
 	http.HandleFunc("/status-list", x.FetchStatusList)
 	http.HandleFunc("/posts", x.FetchPosts)
 	http.HandleFunc("/categories", x.FetchCategories)
+	http.HandleFunc("/media", x.FetchMedia)
 	log.Fatal(http.ListenAndServe(":9000", nil))
 }
 
