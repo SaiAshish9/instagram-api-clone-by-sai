@@ -116,7 +116,7 @@ func (h Home) FetchCategories(w http.ResponseWriter, r *http.Request) {
 
 func (h Home) FetchMedia(w http.ResponseWriter, r *http.Request) {
 
-	rows, err := h.db.Query("SELECT * FROM media")
+	rows, err := h.db.Query("SELECT * FROM media order by id")
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
