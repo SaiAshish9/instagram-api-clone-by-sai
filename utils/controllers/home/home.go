@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	_ "github.com/lib/pq"
+	"github.com/saiashish9/instagram/backend/utils/models/home/categories"
 	"github.com/saiashish9/instagram/backend/utils/models/home/posts"
 	"github.com/saiashish9/instagram/backend/utils/models/home/status"
 )
@@ -27,7 +28,7 @@ func (h Home) FetchStatusList(w http.ResponseWriter, r *http.Request) {
 	// }
 	// _ = x
 
-	rows, err := h.db.Query("SELECT * FROM status")
+	rows, err := h.db.Query("SELECT * FROM status ORDER BY id")
 	if err != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
@@ -37,7 +38,7 @@ func (h Home) FetchStatusList(w http.ResponseWriter, r *http.Request) {
 	links := make([]status.Link, 0)
 	for rows.Next() {
 		lk := status.Link{}
-		err := rows.Scan(&lk.ID, &lk.Name, &lk.Image)
+		err := rows.Scan(&lk.ID, &lk.Name, &lk.Image, &lk.Msg)
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
 			return
@@ -67,6 +68,36 @@ func (h Home) FetchPosts(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		lk := posts.Post{}
 		err := rows.Scan(&lk.ID, &lk.Name, &lk.URL, &lk.ProfileURL, &lk.Title, &lk.Description, &lk.CommentsCount, &lk.Time)
+		if err != nil {
+			http.Error(w, http.StatusText(500), 500)
+			return
+		}
+		links = append(links, lk)
+	}
+	if err = rows.Err(); err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+
+	m, _ := json.Marshal(links)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(m)
+
+}
+
+func (h Home) FetchCategories(w http.ResponseWriter, r *http.Request) {
+
+	rows, err := h.db.Query("SELECT * FROM categories")
+	if err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+	defer rows.Close()
+
+	links := make([]categories.Category, 0)
+	for rows.Next() {
+		lk := categories.Category{}
+		err := rows.Scan(&lk.ID, &lk.Title)
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
 			return
