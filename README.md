@@ -111,3 +111,18 @@ instagram(# desc1 text,
 instagram(# desc2 text);
 
 ```
+
+## Status
+
+```
+instagram=# alter table status add statusImg text;
+ALTER TABLE
+instagram=# alter table status add statusVideo text;
+ALTER TABLE
+instagram=# alter table status add statusMsg text;
+ALTER TABLE
+instagram=# alter table status add time text;
+ALTER TABLE
+
+
+```
