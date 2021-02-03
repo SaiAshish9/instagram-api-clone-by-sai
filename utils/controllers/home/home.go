@@ -9,6 +9,7 @@ import (
 	"github.com/saiashish9/instagram/backend/utils/models/home/categories"
 	"github.com/saiashish9/instagram/backend/utils/models/home/posts"
 	"github.com/saiashish9/instagram/backend/utils/models/home/status"
+	"github.com/saiashish9/instagram/backend/utils/models/home/suggestions"
 	"github.com/saiashish9/instagram/backend/utils/models/search"
 )
 
@@ -127,6 +128,34 @@ func (h Home) FetchMedia(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		lk := search.Media{}
 		err := rows.Scan(&lk.ID, &lk.URL, &lk.IS_VIDEO, &lk.IS_GALLERY)
+		if err != nil {
+			http.Error(w, http.StatusText(500), 500)
+			return
+		}
+		links = append(links, lk)
+	}
+	if err = rows.Err(); err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+	m, _ := json.Marshal(links)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(m)
+}
+
+func (h Home) FetchSuggestions(w http.ResponseWriter, r *http.Request) {
+
+	rows, err := h.db.Query("SELECT * FROM suggestions order by id")
+	if err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+	defer rows.Close()
+
+	links := make([]suggestions.Suggestion, 0)
+	for rows.Next() {
+		lk := suggestions.Suggestion{}
+		err := rows.Scan(&lk.ID, &lk.Image, &lk.Title, &lk.Desc1, &lk.Desc2)
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
 			return

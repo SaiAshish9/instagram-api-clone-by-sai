@@ -34,6 +34,7 @@ func main() {
 	http.HandleFunc("/posts", x.FetchPosts)
 	http.HandleFunc("/categories", x.FetchCategories)
 	http.HandleFunc("/media", x.FetchMedia)
+	http.HandleFunc("/suggestions", x.FetchSuggestions)
 	log.Fatal(http.ListenAndServe(":9000", nil))
 }
 

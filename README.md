@@ -99,3 +99,15 @@ is_gallery int DEFAULT 0);
 alter table media alter column is_video set  default 0 ;
 
 ```
+
+## Suggestions
+
+```
+create table suggestions(
+instagram(# id serial primary key,
+instagram(# image text,
+instagram(# title text,
+instagram(# desc1 text,
+instagram(# desc2 text);
+
+```
