@@ -40,7 +40,7 @@ func (h Home) FetchStatusList(w http.ResponseWriter, r *http.Request) {
 	links := make([]status.Link, 0)
 	for rows.Next() {
 		lk := status.Link{}
-		err := rows.Scan(&lk.ID, &lk.Name, &lk.Image, &lk.Msg, &lk.StatusImg, &lk.StatusVideo, &lk.StatusMsg, &lk.Time)
+		err := rows.Scan(&lk.ID, &lk.Name, &lk.Image, &lk.Msg, &lk.StatusImg, &lk.StatusVideo, &lk.StatusMsg, &lk.Time, &lk.Colors)
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
 			return

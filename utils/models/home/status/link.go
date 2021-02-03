@@ -9,4 +9,5 @@ type Link struct {
 	StatusVideo string `json:"status-video"`
 	StatusMsg   string `json:"status-msg"`
 	Time        string `json:"time"`
+	Colors      string `json:"colors"`
 }

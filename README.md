@@ -123,6 +123,8 @@ instagram=# alter table status add statusMsg text;
 ALTER TABLE
 instagram=# alter table status add time text;
 ALTER TABLE
+instagram=# alter table status add colors text;
+ALTER TABLE
 
 
 ```
